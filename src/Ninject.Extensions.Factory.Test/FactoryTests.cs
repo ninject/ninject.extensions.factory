@@ -83,7 +83,24 @@ namespace Ninject.Extensions.Factory
         }
 
         [Fact]
-        public void NamedLikeFactoryMethod()
+        public void NamedLikeFactoryMethodWithArguments()
+        {
+            const string Name = "Excalibur";
+            const int Width = 34;
+            const int Length = 123;
+            
+            this.kernel.Bind<ICustomizableWeapon>().To<CustomizableSword>().NamedLikeFactoryMethod(
+                (IWeaponFactory f, int l, string n, int w) => f.CreateCustomizableWeapon(l, n, w));
+            
+            this.kernel.Bind<IWeaponFactory>().ToFactory();
+
+            var weapon = this.kernel.Get<IWeaponFactory>().CreateCustomizableWeapon(Length, Name,  Width);
+
+            weapon.Should().BeOfType<CustomizableSword>();
+        }
+              
+        [Fact]
+        public void NamedLikeFactoryMethodWithGetPrefix()
         {
             this.kernel.Bind<IWeapon>().To<Sword>().NamedLikeFactoryMethod((IWeaponFactory f) => f.GetSword());
             this.kernel.Bind<IWeaponFactory>().ToFactory();
@@ -92,11 +109,22 @@ namespace Ninject.Extensions.Factory
 
             weapon.Should().BeOfType<Sword>();
         }
+      
+        [Fact]
+        public void NamedLikeFactoryMethodWithCreatePrefix()
+        {
+            this.kernel.Bind<IWeapon>().To<Sword>().NamedLikeFactoryMethod((IWeaponFactory f) => f.CreateWeapon());
+            this.kernel.Bind<IWeaponFactory>().ToFactory();
 
+            var weapon = this.kernel.Get<IWeaponFactory>().CreateWeapon();
+
+            weapon.Should().BeOfType<Sword>();
+        }     
+        
         [Fact]
         public void NamedLikeFactoryMethodThrowsExceptionWhenNotAGetFactoryMethod()
         {
-            Action action = () => this.kernel.Bind<IWeapon>().To<Sword>().NamedLikeFactoryMethod((IWeaponFactory f) => f.CreateWeapon());
+            Action action = () => this.kernel.Bind<IWeapon>().To<Sword>().NamedLikeFactoryMethod((IWeaponFactory f) => f.FetchWeapon());
 
             action.ShouldThrow<ArgumentException>();
         }

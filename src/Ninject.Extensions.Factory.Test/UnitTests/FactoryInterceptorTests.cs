@@ -48,6 +48,7 @@ namespace Ninject.Extensions.Factory.UnitTests
         public void Intercept()
         {
             var invocation = this.CreateInvocation("TestMethod", 1, "w");
+                      
             this.instanceProviderMock
                 .Setup(ip => ip.GetInstance(this.testee, invocation.Method, invocation.Arguments))
                 .Returns(4);
@@ -64,12 +65,12 @@ namespace Ninject.Extensions.Factory.UnitTests
 
         private IInvocation CreateInvocation(string methodName, params object[] arguments)
         {
-            var invacationMock = new Mock<IInvocation>();
-            invacationMock.Setup(invocation => invocation.Method).Returns(this.GetType().GetMethod(methodName));
-            invacationMock.SetupProperty(invocation => invocation.ReturnValue);
-            invacationMock.Setup(invocation => invocation.Arguments).Returns(arguments);
+            var invocationMock = new Mock<IInvocation>();
+            invocationMock.Setup(invocation => invocation.Method).Returns(this.GetType().GetMethod(methodName));
+            invocationMock.SetupProperty(invocation => invocation.ReturnValue);
+            invocationMock.Setup(invocation => invocation.Arguments).Returns(arguments);
 
-            return invacationMock.Object;
+            return invocationMock.Object;
         }
     }
 }
