@@ -25,6 +25,8 @@ namespace Ninject.Extensions.Factory.Fakes
 
     public interface IWeaponFactory
     {
+        IWeapon FetchWeapon();
+        
         IWeapon CreateWeapon();
 
         ICustomizableWeapon CreateCustomizableWeapon(int length, string name, int width);
