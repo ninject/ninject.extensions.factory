@@ -445,6 +445,7 @@
 	</target>
 	
 	<target name="csproj">
+	    <echo message="Building: ${path.src}/${product.name}/${product.name}.csproj" />
 		<msbuild project="${path.src}/${product.name}/${product.name}.csproj" />
 	</target>
 	
